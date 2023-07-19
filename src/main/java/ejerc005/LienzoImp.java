@@ -5,16 +5,15 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lienzo {
-	
-	private final double x=1000000;
-	private final double y=1000000;
+public class LienzoImp implements Lienzo{
+
+	private final Coordenada maxima = new Coordenada(1000000, 1000000);
 	private List<Figura> figuras;
 	
 	
 	
-	public Lienzo() {
-		this.figuras = new ArrayList();;
+	public LienzoImp() {
+		this.figuras = new ArrayList();
 	}
 
 
@@ -28,18 +27,6 @@ public class Lienzo {
 		this.figuras = figuras;
 	}
 
-	
-
-	public double getX() {
-		return x;
-	}
-
-
-
-	public double getY() {
-		return y;
-	}
-
 
 
 	/**
@@ -48,10 +35,23 @@ public class Lienzo {
 	 * @param figura
 	 */
 	public void definir(Figura figura) {
-		if(comprobarPosicion(figura.centro)) {
-			figuras.add(figura);
+		if(figura.getClass()!=Linea.class) {
+			if(comprobarPosicion(figura.centro)) {
+			this.figuras.add(figura);
+			}
 		}
+		
 	}
+	
+	
+	public void definir(Linea figura) {
+			if(!comprobarPosicion(figura.getPunto1()) && !comprobarPosicion(figura.getPunto2())) {
+				figuras.add(figura);
+
+			}
+	}
+
+
 	
 	/**
 	 * Buscamos la figura en el ArrayList y, si existe, la devolvemos
@@ -67,13 +67,16 @@ public class Lienzo {
 		
 	}
 	
+	
 	/**
 	 * recorremos la lista de figuras y devolvemos el centro de todas
 	 * @return
 	 */
 	public void mostarLista(){
-		figuras.forEach(figura-> figura.getCentro());
+		figuras.forEach(figura-> figura.getColor());
 	}
+	
+	
 	/**
 	 * Buscamos la figura y, de existir, la borramos.
 	 * @param figura
@@ -88,6 +91,7 @@ public class Lienzo {
 		}
 	}
 	
+	
 	/**
 	 * Recibimos la figura a modificar y la nueva figura. comprobamos si existe.
 	 * si existe, la modificamos.
@@ -100,6 +104,8 @@ public class Lienzo {
 		}
 		
 	}
+	
+	
 	/**
 	 * modificamos el color de la figura pasada si esta existe
 	 * @param figura
@@ -112,6 +118,8 @@ public class Lienzo {
 	
 	}
 	
+	
+	
 	/**
 	 * modificamos el tamaño de un circulo modificando su radio con los valores pasados como parametros
 	 * @param figura
@@ -122,6 +130,8 @@ public class Lienzo {
 		figura.setRadio(tamanio);
 		} 
 	}
+	
+	
 	
 	/**
 	 * modificamos el tamaño de un cuadrado modificando su lado con los valores pasados como parametros
@@ -135,17 +145,25 @@ public class Lienzo {
 	}
 
 	
+	
 	/**
 	 * modificamos el tamaño de la linea 
-	 * cambiando los valores de su punto2
+	 * cambiando los valores de su punto2.
+	 * despues se comprueba si los dos puntos de la linea estan fuera del lienzo.
+	 * si es asi, se elimina la figura.
 	 * @param tamanio
 	 * @param figura
 	 */
 	public void modificarTamanio(double newX, double newY, Linea figura) {
+		
 		if(buscar(figura)!=null) {
 			figura.getPunto2().cambioCoordenada(newX, newY);
+			if(!comprobarPosicion(figura.getPunto1()) && !comprobarPosicion(figura.getPunto2())) {
+				eliminar(figura);
+			}
 		}
 	}
+	
 	
 	
 	/**
@@ -175,15 +193,14 @@ public class Lienzo {
 	 * @return
 	 */
 	public boolean comprobarPosicion(Coordenada coordenada) {
-		if(coordenada.getX()>0 && coordenada.getX()<x) {
-			if(coordenada.getY()>=0 && coordenada.getY()<y) {
-				return true;
-			}else {
-				return false;
+		boolean a =false;
+		if(coordenada.getX()>0 && coordenada.getX()<maxima.getX()) {
+			if(coordenada.getY()>=0 && coordenada.getY()<maxima.getY()) {
+				a= true;
 			}
-		}else {
-			return false;
+			
 		}
+		return a;
 		
 	}
 
