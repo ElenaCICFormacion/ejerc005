@@ -68,12 +68,11 @@ public class LienzoImp implements Lienzo{
 	}
 	
 	
-	/**
-	 * recorremos la lista de figuras y devolvemos el centro de todas
-	 * @return
-	 */
-	public void mostarLista(){
-		figuras.forEach(figura-> figura.getColor());
+	
+	public ArrayList<Figura> mostarLista(){
+		ArrayList<Figura> figuras2= new ArrayList();
+		figuras.forEach(figura-> figuras2.add(figura));
+		return figuras2;
 	}
 	
 	
