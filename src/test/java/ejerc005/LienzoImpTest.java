@@ -171,9 +171,7 @@ class LienzoImpTest {
 
 	@Test
 	void testComprobarPosicion() {
-		this.dependencia.setX(34.34);
-		this.dependencia.setY(10000004);
-		boolean resultado=cut.comprobarPosicion(dependencia);
+		boolean resultado=cut.comprobarPosicion(new Coordenada(23.23, 1000000));
 		assertThat("La posicion esta fuera del lienzo, por lo que debe dar false", resultado, is(false));
 
 	}
